@@ -7,19 +7,39 @@ if (!empty($_POST)) {
     $data['errores'] = checkErrors($_POST['json']);
     $data['input']['json'] = filter_var($_POST['json'], FILTER_SANITIZE_SPECIAL_CHARS);
     $json = json_decode($_POST['json'], true);
-    if (!empty($data['errores'])) {
-
-    }else{
+    if (empty($data['errores'])) {
         $datosAsignatura=[];
         foreach ($json as $asignaturas=>$alumnos) {
             $todaslasNotas=[];
+            $aprobados=0;
+            $suspensos=0;
+            $notaMasAlta=-1;
+            $notaMasBaja=11;
+            $alumnoNotaMasAlta="";
+            $alumnoNotaMasBaja="";
             foreach ($alumnos as $alumno=>$notas) {
                 foreach ($notas as $nota) {
                     $todaslasNotas[]=$nota;
+                    if($nota>=5){
+                        $aprobados++;
+                    }else{
+                        $suspensos++;
+                    }
+                    if($nota>$notaMasAlta){
+                        $notaMasAlta=$nota;
+                        $alumnoNotaMasAlta=$alumno;
+                    }elseif ($nota<$notaMasBaja){
+                        $notaMasBaja=$nota;
+                        $alumnoNotaMasBaja=$alumno;
+                    }
                 }
                 $sumaDeNotas=array_sum($todaslasNotas);
             }
-            $datosAsignatura['sumaDeNotas']=$sumaDeNotas;
+            $datosAsignatura['media']=round($sumaDeNotas/count($todaslasNotas),2);
+            $datosAsignatura['aprobados']=$aprobados;
+            $datosAsignatura['suspensos']=$suspensos;
+            $datosAsignatura['notaMasAlta']="Nota:".$notaMasAlta." Alumno:".$alumnoNotaMasAlta;
+            $datosAsignatura['notaMasBaja']="Nota:".$notaMasBaja." Alumno:".$alumnoNotaMasBaja;
             $resultado[$asignaturas]=$datosAsignatura;
         }
         var_dump($resultado);
