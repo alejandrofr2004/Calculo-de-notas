@@ -49,13 +49,23 @@ function checkErrors(string $texto) : array
                     }else{
                         if(!is_array($alumnos)){
                             $errores['json'][] = 'La asignatura '.$asignatura .' no contiene un array de alumnos';
-                        }
-                    }
-                    foreach ($alumnos as $alumno=>$notas) {
-                        foreach ($notas as $nota) {
-                            if(!is_numeric($nota)){
-                                $errores['json'][] = 'La nota '.$nota.' del alumno '.$alumno.' de la
-                                 asignatura '.$asignatura.' no es un numero.';
+                        } else {
+                            foreach ($alumnos as $alumno => $notas) {
+                                if (!is_string($alumno)) {
+                                    $errores['json'][] = 'El nombre del alumno ' . $alumno . ' de la asignatura
+                                     ' . $asignatura . ' no es un nombre valido';
+                                } else {
+                                    if (!is_array($notas)) {
+                                        $errores['json'][] = 'El alumno ' . $alumno . ' no contiene un array de notas';
+                                    } else {
+                                        foreach ($notas as $nota) {
+                                            if (!is_numeric($nota)) {
+                                                $errores['json'][] = 'La nota ' . $nota . ' del alumno ' . $alumno . ' de la
+                                 asignatura ' . $asignatura . ' no es un numero.';
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
