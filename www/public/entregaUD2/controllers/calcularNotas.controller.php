@@ -6,8 +6,23 @@ $data = [];
 if (!empty($_POST)) {
     $data['errores'] = checkErrors($_POST['json']);
     $data['input']['json'] = filter_var($_POST['json'], FILTER_SANITIZE_SPECIAL_CHARS);
-    if (empty($data['errores'])) {
+    $json = json_decode($_POST['json'], true);
+    if (!empty($data['errores'])) {
 
+    }else{
+        $datosAsignatura=[];
+        foreach ($json as $asignaturas=>$alumnos) {
+            $todaslasNotas=[];
+            foreach ($alumnos as $alumno=>$notas) {
+                foreach ($notas as $nota) {
+                    $todaslasNotas[]=$nota;
+                }
+                $sumaDeNotas=array_sum($todaslasNotas);
+            }
+            $datosAsignatura['sumaDeNotas']=$sumaDeNotas;
+            $resultado[$asignaturas]=$datosAsignatura;
+        }
+        var_dump($resultado);
     }
 }
 function checkErrors(string $texto) : array
@@ -26,14 +41,28 @@ function checkErrors(string $texto) : array
         else
         {
             if(!is_array($json)){
-                $errores['json'][] = 'El Json no contiene un array de materias';
-            }
-            else{
-
+                $errores['json'][] = 'El json debe tener un array con las materias';
+            }else{
+                foreach ($json as $asignatura=>$alumnos) {
+                    if(!is_string($asignatura)){
+                        $errores['json'][] = 'La asignatura '.$asignatura .' no es un nombre válido';
+                    }else{
+                        if(!is_array($alumnos)){
+                            $errores['json'][] = 'La asignatura '.$asignatura .' no contiene un array de alumnos';
+                        }
+                    }
+                    foreach ($alumnos as $alumno=>$notas) {
+                        foreach ($notas as $nota) {
+                            if(!is_numeric($nota)){
+                                $errores['json'][] = 'La nota '.$nota.' del alumno '.$alumno.' de la
+                                 asignatura '.$asignatura.' no es un numero.';
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-    var_dump($errores);
     return $errores;
 }
 

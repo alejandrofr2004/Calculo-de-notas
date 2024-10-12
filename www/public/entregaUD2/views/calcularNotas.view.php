@@ -24,7 +24,7 @@
                 <form method="post" action="./?sec=calcularNotas">
                     <!--<input type="hidden" name="sec" value="iterativas01" />-->
                     <div class="mb-3">
-                        <label for="texto">JSON:</label>
+                        <label for="texto">Calcular notas:</label>
                         <textarea class="form-control" name="json" id="json" rows="3" placeholder="Inserte el json"><?php echo $data['input']['json'] ?? ''; ?></textarea>
                         <p class="text-danger small"><?php echo isset($data['errores']['json']) ? implode('<br/>',$data['errores']['json']) : ''; ?></p>
                     </div>
