@@ -48,6 +48,26 @@
                 </tbody>
             </table>
         </div>
+    <div class="col-4">
+        <div class="alert alert-success">
+            <?php echo implode("<br/>",$data['listadoSuspensos']['aprobaronTodo']) ?>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="alert alert-warning">
+            <?php echo implode("<br/>",$data['listadoSuspensos']['suspendieronAlguna']) ?>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="alert alert-info">
+            <?php echo implode("<br/>",$data['listadoSuspensos']['promocionan']) ?>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="alert alert-danger">
+            <?php echo implode("<br/>",$data['listadoSuspensos']['noPromocionan']) ?>
+        </div>
+    </div>
     <?php } ?>
     <div class="col-12">
         <div class="card shadow mb-4">
@@ -58,7 +78,7 @@
             <!-- Card Body -->
             <div class="card-body">
                 <!--<form action="./?sec=formulario" method="post">                   -->
-                <form method="post" action="./?sec=calcularNotas">
+                <form method="post" action="./?sec=calcularNotas.AlejandroFernandezRegueiro">
                     <!--<input type="hidden" name="sec" value="iterativas01" />-->
                     <div class="mb-3">
                         <label for="texto">Calcular notas:</label>

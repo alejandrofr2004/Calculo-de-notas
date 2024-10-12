@@ -9,6 +9,7 @@ if (!empty($_POST)) {
     $json = json_decode($_POST['json'], true);
     if (empty($data['errores'])) {
         $datosAsignatura=[];
+        $contarSuspensosAlumnos=[];
         foreach ($json as $asignaturas=>$alumnos) {
             $todaslasNotas=[];
             $aprobados=0;
@@ -19,10 +20,14 @@ if (!empty($_POST)) {
             $alumnoNotaMasBaja="";
             foreach ($alumnos as $alumno=>$notas) {
                 foreach ($notas as $nota) {
+                    if(!isset($contarSuspensosAlumnos[$alumno])) {
+                        $contarSuspensosAlumnos[$alumno]=0;
+                    }
                     $todaslasNotas[]=$nota;
                     if($nota>=5){
                         $aprobados++;
                     }else{
+                        $contarSuspensosAlumnos[$alumno]++;
                         $suspensos++;
                     }
                     if($nota>$notaMasAlta){
@@ -35,15 +40,42 @@ if (!empty($_POST)) {
                 }
                 $sumaDeNotas=array_sum($todaslasNotas);
             }
-            $datosAsignatura['media']=round($sumaDeNotas/count($todaslasNotas),2);
+            $datosAsignatura['media']=!empty($alumnos)?round($sumaDeNotas/count($todaslasNotas),2):"-";
             $datosAsignatura['aprobados']=$aprobados;
             $datosAsignatura['suspensos']=$suspensos;
-            $datosAsignatura['notaMasAlta']=$alumnoNotaMasAlta.": ".$notaMasAlta;
-            $datosAsignatura['notaMasBaja']=$alumnoNotaMasBaja.": ".$notaMasBaja;
+            $datosAsignatura['notaMasAlta']=!empty($alumnos)?$alumnoNotaMasAlta.": ".$notaMasAlta:"-";
+            $datosAsignatura['notaMasBaja']=!empty($alumnos)?$alumnoNotaMasBaja.": ".$notaMasBaja:"-";
             $resultado[$asignaturas]=$datosAsignatura;
         }
         $data['resultado']=$resultado;
+        $data['listadoSuspensos']=contarSuspensosAlumnos($contarSuspensosAlumnos);
     }
+}
+
+function contarSuspensosAlumnos(array $alumnos):array
+{
+    $aprobaronTodo=[];
+    $suspendieronAlguna=[];
+    $promocionan=[];
+    $noPromocionan=[];
+    foreach ($alumnos as $alumno=>$suspensos) {
+        if($suspensos==0){
+            $aprobaronTodo[]=$alumno;
+            $promocionan[]=$alumno;
+        }elseif ($suspensos==1){
+            $suspendieronAlguna[]=$alumno;
+            $promocionan[]=$alumno;
+        }else{
+            $suspendieronAlguna[]=$alumno;
+            $noPromocionan[]=$alumno;
+        }
+    }
+    return [
+        'aprobaronTodo'=>$aprobaronTodo,
+        'suspendieronAlguna'=>$suspendieronAlguna,
+        'promocionan'=>$promocionan,
+        'noPromocionan'=>$noPromocionan
+    ];
 }
 function checkErrors(string $texto) : array
 {
@@ -97,5 +129,5 @@ function checkErrors(string $texto) : array
 }
 
 include 'views/templates/header.php';
-include 'views/calcularNotas.view.php';
+include 'views/calcularNotas.AlejandroFernandezRegueiro.view.php';
 include 'views/templates/footer.php';
