@@ -48,22 +48,22 @@
                 </tbody>
             </table>
         </div>
-    <div class="col-4">
+    <div class="col-12 col-lg-6">
         <div class="alert alert-success">
             <?php echo implode("<br/>",$data['listadoSuspensos']['aprobaronTodo']) ?>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-12 col-lg-6">
         <div class="alert alert-warning">
             <?php echo implode("<br/>",$data['listadoSuspensos']['suspendieronAlguna']) ?>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-12 col-lg-6">
         <div class="alert alert-info">
             <?php echo implode("<br/>",$data['listadoSuspensos']['promocionan']) ?>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-12 col-lg-6">
         <div class="alert alert-danger">
             <?php echo implode("<br/>",$data['listadoSuspensos']['noPromocionan']) ?>
         </div>
