@@ -38,11 +38,11 @@ if (!empty($_POST)) {
             $datosAsignatura['media']=round($sumaDeNotas/count($todaslasNotas),2);
             $datosAsignatura['aprobados']=$aprobados;
             $datosAsignatura['suspensos']=$suspensos;
-            $datosAsignatura['notaMasAlta']="Nota:".$notaMasAlta." Alumno:".$alumnoNotaMasAlta;
-            $datosAsignatura['notaMasBaja']="Nota:".$notaMasBaja." Alumno:".$alumnoNotaMasBaja;
+            $datosAsignatura['notaMasAlta']=$alumnoNotaMasAlta.": ".$notaMasAlta;
+            $datosAsignatura['notaMasBaja']=$alumnoNotaMasBaja.": ".$notaMasBaja;
             $resultado[$asignaturas]=$datosAsignatura;
         }
-        var_dump($resultado);
+        $data['resultado']=$resultado;
     }
 }
 function checkErrors(string $texto) : array

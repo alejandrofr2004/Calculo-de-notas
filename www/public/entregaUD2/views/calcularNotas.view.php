@@ -4,18 +4,55 @@
 
 </div>
 <!-- Content Row -->
-
 <div class="row">
-    <div class="col-12">
-        <div class="alert alert-success">
-
+    <?php
+    if (isset($data['resultado'])) {
+        ?>
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Módulos
+                    </th>
+                    <th>
+                        Media
+                    </th>
+                    <th>
+                        Aprobados
+                    </th>
+                    <th>
+                        Suspensos
+                    </th>
+                    <th>
+                        Máximo
+                    </th>
+                    <th>
+                        Mínimo
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($data['resultado'] as $asignatura => $datos) {
+                    ?>
+                    <tr>
+                        <td><?php echo $asignatura ?></td>
+                        <td><?php echo $datos['media'] ?></td>
+                        <td><?php echo $datos['aprobados'] ?></td>
+                        <td><?php echo $datos['suspensos'] ?></td>
+                        <td><?php echo $datos['notaMasAlta'] ?></td>
+                        <td><?php echo $datos['notaMasBaja'] ?></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </div>
-    </div>
-    }
+    <?php } ?>
     <div class="col-12">
         <div class="card shadow mb-4">
             <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">JSON</h6>
             </div>
             <!-- Card Body -->
