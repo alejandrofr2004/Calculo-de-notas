@@ -10,25 +10,22 @@ if (!empty($_POST)) {
     if (empty($data['errores'])) {
         $datosAsignatura=[];
         $contarSuspensosAlumnos=[];
+        //Hacer un array para meter a todos los alumnos y sus medias de cada asignatura
+        $arrayAlumnosMedias=[];
         foreach ($json as $asignaturas=>$alumnos) {
-            $todaslasNotas=[];
             $aprobados=0;
             $suspensos=0;
             $notaMasAlta=-1;
             $notaMasBaja=11;
             $alumnoNotaMasAlta="";
             $alumnoNotaMasBaja="";
+            $mediaAlumno = 0;
             foreach ($alumnos as $alumno=>$notas) {
+                $mediaAlumno = array_sum($notas)/count($notas);
+                $mediasGlobales[]=$mediaAlumno;
                 foreach ($notas as $nota) {
                     if(!isset($contarSuspensosAlumnos[$alumno])) {
                         $contarSuspensosAlumnos[$alumno]=0;
-                    }
-                    $todaslasNotas[]=$nota;
-                    if($nota>=5){
-                        $aprobados++;
-                    }else{
-                        $contarSuspensosAlumnos[$alumno]++;
-                        $suspensos++;
                     }
                     if($nota>$notaMasAlta){
                         $notaMasAlta=$nota;
@@ -38,9 +35,14 @@ if (!empty($_POST)) {
                         $alumnoNotaMasBaja=$alumno;
                     }
                 }
-                $sumaDeNotas=array_sum($todaslasNotas);
+                if($mediaAlumno>=5){
+                    $aprobados++;
+                }else{
+                    $contarSuspensosAlumnos[$alumno]++;
+                    $suspensos++;
+                }
             }
-            $datosAsignatura['media']=!empty($alumnos)?round($sumaDeNotas/count($todaslasNotas),2):"-";
+            $datosAsignatura['media']=!empty($alumnos)?round(array_sum($mediasGlobales)/count($mediasGlobales),2):"-";
             $datosAsignatura['aprobados']=$aprobados;
             $datosAsignatura['suspensos']=$suspensos;
             $datosAsignatura['notaMasAlta']=!empty($alumnos)?$alumnoNotaMasAlta.": ".$notaMasAlta:"-";
